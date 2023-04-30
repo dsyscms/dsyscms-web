@@ -1,2 +1,2 @@
 # dsyscms-web
-dsyscms web is a front-end site
+dsyscms web is a frontend site
