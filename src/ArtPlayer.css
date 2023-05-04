@@ -1,0 +1,21 @@
+/*.artplayer-app {*/
+/*  width: 400px;*/
+/*  height: 300px;*/
+/*}*/
+.artplayer-app {
+    aspect-ratio: 16/9;
+}
+
+.art-settings {
+    max-height: 300px !important;
+}
+
+#art-icon-play-next {
+    --art-control-icon-scale: 1.3 !important;
+}
+@media only screen and (max-device-width :480px){
+    #art-icon-play-next {
+        --art-control-icon-scale: 1.2 !important;
+    }
+}
+
