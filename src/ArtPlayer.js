@@ -1,9 +1,10 @@
 import {useEffect, useRef} from 'react';
 import Artplayer from 'artplayer';
 import './ArtPlayer.css'
-import dashjs from "dashjs";
+// import dashjs from "dashjs";
 // import artplayerPluginDashQuality from "artplayer-plugin-dash-quality";
 import Hls from "hls.js";
+import theme from "@/app/Theme";
 // import artplayerPluginHlsQuality from "artplayer-plugin-hls-quality";
 
 export default function Player({option, getInstance, ...rest}) {
@@ -17,7 +18,10 @@ export default function Player({option, getInstance, ...rest}) {
         // }
         // Artplayer.SETTING_ITEM_WIDTH = 300;
         // Artplayer.SETTING_ITEM_HEIGHT = 40;
-        let url = 'https://test-streams.mux.dev/x36xhzz/url_6/193039199_mp4_h264_aac_hq_7.m3u8';
+        // let url = 'https://test-streams.mux.dev/x36xhzz/url_6/193039199_mp4_h264_aac_hq_7.m3u8'; // not 16:9 video
+        let url = 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'; // 16:9 video
+        // let url = 'https://340111-static-test.huangshancloud.com:7100/ebmsg-resource/6a2fd32b46a18798b8a27be00f803101/6cf5392245827e226fa19d9b2e3853cd..mp4'; // vertical screen video
+
         let type = 'mpd';
         let quality = [];
 
@@ -57,10 +61,9 @@ export default function Player({option, getInstance, ...rest}) {
         }
         const id = "10000";
 
-
         const art = new Artplayer({
             ...option,
-            container: artRef.current,
+            container: '.video-container',
             // Show quality in setting
             setting: true,
             volume: 0.7,
@@ -110,14 +113,14 @@ export default function Player({option, getInstance, ...rest}) {
                             default: true,
                             url: 'close'
                         },
-                        {
-                            html: 'English',
-                            url: '/assets/sample/subtitle.srt',
-                        },
-                        {
-                            html: 'Chinese',
-                            url: '/assets/sample/subtitle.cn.srt',
-                        },
+                        // {
+                        //     html: 'English',
+                        //     url: '/assets/sample/subtitle.srt',
+                        // },
+                        // {
+                        //     html: 'Chinese',
+                        //     url: '/assets/sample/subtitle.cn.srt',
+                        // },
                     ],
                     onSelect: function (item) {
 
@@ -165,53 +168,67 @@ export default function Player({option, getInstance, ...rest}) {
         });
 
 
-        art.controls.add({
-            name: 'prev-button',
-            // index: 10,
-            position: 'right',
-            html: '<i class="art-icon"><img width="100%" heigth="100%" src="/arrow-left.svg"></i>',
+        let changeButtonSetting = false;
+        if (changeButtonSetting === true) {
+            art.controls.add({
+                name: 'prev-button',
+                // index: 10,
+                position: 'right',
+                html: '<i class="art-icon"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" version="1.1" viewBox="0 0 32 32">\n' +
+                    '    <path d="M 19.41,20.09 14.83,15.5 19.41,10.91 18,9.5 l -6,6 6,6 z" fill="#fff" />\n' +
+                    '</svg></i>',
 
-            tooltip: '上一个',
-            style: {
-                // color: 'red',
-                // marginRight: '20px',
-            },
-            click: function (...args) {
-                console.info('click', args);
-                let prevUrl = 'https://test-streams.mux.dev/x36xhzz/url_6/193039199_mp4_h264_aac_hq_7.m3u8';
+                tooltip: '上一个',
+                style: {
+                    // color: 'red',
+                    // marginRight: '20px',
+                },
+                click: function (...args) {
+                    console.info('click', args);
+                    let prevUrl = 'https://test-streams.mux.dev/x36xhzz/url_6/193039199_mp4_h264_aac_hq_7.m3u8';
 
-                if (art.dash) art.dash.destroy();
-                if (art.hls) art.hls.destroy();
-                art.switchUrl(prevUrl);
-                art.play();
-            },
-            mounted: function (...args) {
-                console.info('mounted', args);
-            },
-        });
+                    if (art.dash) art.dash.destroy();
+                    if (art.hls) art.hls.destroy();
+                    art.switchUrl(prevUrl);
+                    art.play();
+                },
+                mounted: function (...args) {
+                    console.info('mounted', args);
+                },
+            });
 
-        art.controls.add({
-            name: 'next-button',
-            // index: 10,
-            position: 'right',
-            html: '<i class="art-icon"><img width="100%" heigth="100%" src="/arrow-right.svg"></i>',
-            tooltip: '下一个',
-            style: {
-                // color: 'red',
-            },
-            click: function (...args) {
-                console.info('click', args);
-                let nextUrl = 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
-                if (art.dash) art.dash.destroy();
-                if (art.hls) art.hls.destroy();
-                art.switchUrl(nextUrl);
-                art.play();
-            },
-            mounted: function (...args) {
-                console.info('mounted', args);
-            },
-        });
 
+            art.controls.add({
+                name: 'next-button',
+                // index: 10,
+                position: 'right',
+                html: '<i class="art-icon"><svg xmlns="http://www.w3.org/2000/svg" height="32" width="32" version="1.1" viewBox="0 0 32 32">\n' +
+                    '    <path d="m 12.59,20.34 4.58,-4.59 -4.58,-4.59 1.41,-1.41 6,6 -6,6 z" fill="#fff"/>\n' +
+                    '</svg></i>',
+                tooltip: '下一个',
+                style: {
+                    // color: 'red',
+                },
+                click: function (...args) {
+                    console.info('click', args);
+                    let nextUrl = 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd';
+                    if (art.dash) art.dash.destroy();
+                    if (art.hls) art.hls.destroy();
+                    art.switchUrl(nextUrl);
+                    art.play();
+                },
+                mounted: function (...args) {
+                    console.info('mounted', args);
+                },
+            });
+        }
+
+
+        // let urlArr = [
+        //     'https://m3u8.38cdn.com/newhd/202304/64311624b34733324e32d055/hls/index.m3u8',
+        //     'https://m3u8.48cdn.com/newhd/202304/64311624b34733324e32d055/hls/index.m3u8',
+        //     'https://m3u8.46cdn.com/newhd/202304/64311624b34733324e32d055/hls/index.m3u8',
+        // ];
 
         art.setting.add({
                 // name: 'route-select-button',
@@ -227,16 +244,16 @@ export default function Player({option, getInstance, ...rest}) {
                         url: url
                     },
                     {
-                        html: 'mp4',
-                        url: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+                        html: '线路一',
+                        url: url
                     },
                     {
-                        html: 'm3u8',
-                        url: 'https://test-streams.mux.dev/x36xhzz/url_6/193039199_mp4_h264_aac_hq_7.m3u8'
+                        html: '线路二',
+                        url: url
                     },
                     {
-                        html: 'mpd',
-                        url: 'https://storage.googleapis.com/shaka-demo-assets/angel-one/dash.mpd',
+                        html: '线路三',
+                        url: url,
                     },
 
                 ],
@@ -295,13 +312,55 @@ export default function Player({option, getInstance, ...rest}) {
             getInstance(art);
         }
 
-        art.on('restart', (url) => {
-            console.info('restart', url);
-        });
+        function autoSizeVideo() {
+            // console.log(art.video.videoWidth)
+            // console.log(art.video.videoHeight)
+            // alert(navigator.userAgent)；
+            let videoContainer = document.getElementById('video-container');
+
+            if (art.video.videoHeight > art.video.videoWidth) {
+                // mobile device
+                if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                    // alert(art.video.videoWidth + ":" + art.video.videoHeight);
+                    videoContainer.style.aspectRatio = (art.video.videoWidth / art.video.videoHeight);
+                    art.autoHeight;
+                } else {
+                    // theme mode
+                    if (theme.palette.mode === 'dark') {
+                        art.cssVar('--art-background-color', '#000');
+                    } else {
+                        art.cssVar('--art-background-color', '#fff');
+                    }
+                }
+            } else {
+                if ((art.video.videoWidth / art.video.videoHeight) < (16 / 9)) {
+                    // alert(art.video.videoWidth + ":" + art.video.videoHeight);
+                    // videoContainer.classList.remove("video-container");
+                    videoContainer.style.aspectRatio = (art.video.videoWidth / art.video.videoHeight);
+                    // videoContainer.style.aspectRatio = (4/3);
+                }
+            }
+        }
 
         art.on('ready', () => {
             console.log('ready')
-            console.info(art.plugins.changeRoutePlugin);
+            // art.cssVar('--art-theme', 'green');
+            // art.cssVar('background-color', 'rgba(0, 0, 0, 0)');
+            // console.log(art.cssVar('--art-theme'));
+        });
+
+        art.on('video:canplay', () => {
+            console.info('video:canplay');
+            autoSizeVideo();
+            // art.cssVar('background-color', 'rgba(0, 0, 0, 0)');
+            // console.log("play url: "+art.url);
+            // if (art.dash) art.dash.destroy();
+            // if (art.hls) art.hls.destroy();
+            // art.play();
+        });
+
+        art.on('restart', (url) => {
+            console.info('restart', url);
         });
 
         art.on('loading', (state) => {
@@ -312,7 +371,22 @@ export default function Player({option, getInstance, ...rest}) {
             }
 
         });
+
+        function setTheme(state) {
+            // theme mode
+            if (theme.palette.mode === 'dark') {
+                art.cssVar('--art-background-color', '#000');
+            } else {
+                if (state) {
+                    art.cssVar('--art-background-color', '#000');
+                } else {
+                    art.cssVar('--art-background-color', '#fff');
+                }
+            }
+        }
+
         art.on('fullscreen', (state) => {
+            setTheme(state);
             console.info('fullscreen', state);
             // if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
             //     // 当前设备是移动设备
@@ -325,7 +399,11 @@ export default function Player({option, getInstance, ...rest}) {
             // }
         });
 
+
         art.on('fullscreenWeb', (state) => {
+
+            setTheme(state);
+
             console.info('fullscreenWeb', state);
             // if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
             //     // 当前设备是移动设备
@@ -337,20 +415,28 @@ export default function Player({option, getInstance, ...rest}) {
             //     }
             // }
         });
+
         art.on('mini', (state) => {
             console.info('mini', state);
         });
         art.on('pip', (state) => {
             console.info('pip', state);
         });
-        art.on('video:canplay', () => {
-            console.info('video:canplay');
 
-            // console.log("play url: "+art.url);
-            // if (art.dash) art.dash.destroy();
-            // if (art.hls) art.hls.destroy();
-            // art.play();
+
+        const changeVideo = document.querySelector('.change-video');
+        let urlArr = [
+            'https://test-streams.mux.dev/x36xhzz/url_6/193039199_mp4_h264_aac_hq_7.m3u8',
+            'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            'https://340111-static-test.huangshancloud.com:7100/ebmsg-resource/6a2fd32b46a18798b8a27be00f803101/6cf5392245827e226fa19d9b2e3853cd..mp4',
+        ];
+        changeVideo.addEventListener('click', (event) => {
+            if (urlArr.length > 0) {
+                art.switchUrl(urlArr[0]);
+                urlArr.shift();
+            }
         });
+
 
         return () => {
             if (art && art.destroy) {

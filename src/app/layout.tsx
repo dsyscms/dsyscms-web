@@ -1,5 +1,6 @@
-//import './globals.css'
+import './globals.css'
 import { Inter } from 'next/font/google'
+import React from "react";
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
@@ -15,6 +16,7 @@ export default function RootLayout({
   return (
 
     <html lang="en">
+    <meta name="viewport" content="initial-scale=1, width=device-width" />
       <body
           className={inter.className}>{children}
       </body>

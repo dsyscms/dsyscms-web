@@ -2,18 +2,19 @@
 .art-settings {
     max-height: 300px !important;
 }
+
+.video-container{
+    aspect-ratio: 16/9;
+}
+
 /* mobile css */
 @media (max-width: 768px){
     #art-icon-play-next {
         --art-control-icon-scale: 1.2 !important;
     }
     .video-container{
-        /*margin: 0 10px 0 10px;*/
-        aspect-ratio: 16/9;
+        margin: 0 10px 0 10px;
     }
-}
-.video-container video{
-    /*object-fit: cover;*/
 }
 /* pc css */
 @media (min-width: 768px){
@@ -22,10 +23,7 @@
     }
     .video-container{
         margin: 0 100px 0 100px;
-        aspect-ratio: 16/9;
-        /*width: 400px;*/
-        /*height: 300px;*/
+
     }
 }
-
 
